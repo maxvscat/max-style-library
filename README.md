@@ -19,3 +19,6 @@ AI 剪輯、資訊動畫用的風格收集。網頁版：https://maxvscat.github
 在風格頁按「上傳樣張圖」，把圖丟進 `previews/<代號>/`，再把路徑加到該風格 JSON 的 `previews` 欄位。
 
 > `styles/index.json` 是備用清單（GitHub API 讀不到時才用），新增風格時可以順手把代號加進去。
+
+## 樣張原始碼
+`preview-src/` 放用程式重畫樣張的 HTML（1920×1080，網址加 `?s=1`～`?s=4` 切場景），截圖後縮成 1280×720 jpg 放進 `previews/<代號>/`。

@@ -4,22 +4,57 @@
   "subtitle": "街頭拼貼",
   "status": "已完成成片",
   "added": "2026-10-28",
-  "ratio": ["16:9"],
+  "ratio": [
+    "16:9"
+  ],
   "needsAssets": true,
-  "bestFor": ["衝擊感強的開場", "社會議題", "情緒性標題"],
+  "bestFor": [
+    "衝擊感強的開場",
+    "社會議題",
+    "情緒性標題"
+  ],
   "reference": "MAX 提供的三張撕貼海報牆圖（層疊海報、撕邊、粗黑字貼在白紙上）",
   "mood": "粗糙、急迫、像街頭被一再覆蓋的海報牆。每個資訊都是「被貼上去」的。",
   "colors": [
-    { "name": "墨黑", "hex": "#141414", "role": "主文字" },
-    { "name": "米白紙", "hex": "#f3ece0", "role": "前景紙張" },
-    { "name": "磚紅", "hex": "#b0322a", "role": "關鍵句長條、劃線、問號" },
-    { "name": "藏青（素材）", "hex": "#2c3e5c", "role": "由牆面素材提供" },
-    { "name": "芥末黃（素材）", "hex": "#c9a227", "role": "由海報素材提供" }
+    {
+      "name": "墨黑",
+      "hex": "#141414",
+      "role": "主文字"
+    },
+    {
+      "name": "米白紙",
+      "hex": "#f3ece0",
+      "role": "前景紙張"
+    },
+    {
+      "name": "磚紅",
+      "hex": "#b0322a",
+      "role": "關鍵句長條、劃線、問號"
+    },
+    {
+      "name": "藏青（素材）",
+      "hex": "#2c3e5c",
+      "role": "由牆面素材提供"
+    },
+    {
+      "name": "芥末黃（素材）",
+      "hex": "#c9a227",
+      "role": "由海報素材提供"
+    }
   ],
   "fonts": [
-    { "role": "主要", "family": "Noto Sans CJK TC Black（900）" },
-    { "role": "小字", "family": "Noto Sans CJK TC Bold（700）" },
-    { "role": "所有文字", "family": "加 grunge 遮罩：mask-image url(07_grunge.png)、mask-mode luminance、mask-size 700px auto" }
+    {
+      "role": "主要",
+      "family": "Noto Sans CJK TC Black（900）"
+    },
+    {
+      "role": "小字",
+      "family": "Noto Sans CJK TC Bold（700）"
+    },
+    {
+      "role": "所有文字",
+      "family": "加 grunge 遮罩：mask-image url(07_grunge.png)、mask-mode luminance、mask-size 700px auto"
+    }
   ],
   "layout": [
     "零件絕對定位，各自旋轉 −8°～+8°，加雙層 drop-shadow",
@@ -57,8 +92,20 @@
     "素材 prompt：A weathered urban wall completely covered in layers of old torn posters and newspaper scraps, collage texture, muted vintage palette of off-white, faded navy blue, brick red and mustard yellow, peeling paper edges, glue stains, grime, halftone print texture, flat front-facing view, NO readable text, NO logos, NO faces, 16:9（物件類加 isolated on a transparent background, PNG）"
   ],
   "examples": [
-    { "title": "台灣少子化危機開場 v1", "date": "2026-10-28", "desc": "四層牆：深色（標題、正持續、惡化）→ 彩色（2025、107,812、歷史新低）→ 深色翻面（2026、九格月份、69,446）→ 彩色翻面（嬰兒掉落、學校、勞動力、經濟、衝擊？）" }
+    {
+      "title": "台灣少子化危機開場 v1",
+      "date": "2026-10-28",
+      "desc": "四層牆：深色（標題、正持續、惡化）→ 彩色（2025、107,812、歷史新低）→ 深色翻面（2026、九格月份、69,446）→ 彩色翻面（嬰兒掉落、學校、勞動力、經濟、衝擊？）"
+    }
   ],
-  "previews": [],
-  "notes": ["素材用 ChatGPT 生成：不要文字、logo、人臉；物件類要透明背景 PNG"]
+  "previews": [
+    "previews/torn-poster/01.jpg",
+    "previews/torn-poster/02.jpg",
+    "previews/torn-poster/03.jpg",
+    "previews/torn-poster/04.jpg"
+  ],
+  "notes": [
+    "素材用 ChatGPT 生成：不要文字、logo、人臉；物件類要透明背景 PNG",
+    "樣張是純程式模擬的定格（SVG 撕邊＋雜訊紋理，不用 ChatGPT 素材），質感比正式成片平；原始碼在 preview-src/torn-poster.html"
+  ]
 }

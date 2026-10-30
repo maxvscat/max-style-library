@@ -1,0 +1,112 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--ink:#1c1c1a;--ink2:#55554f;--gray:#8d8c86;--paper:#f7f6f1;--bg:#d8d8d3;--red:#c4262c}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden}
+body{background:radial-gradient(ellipse at 50% 45%,#e4e4df 0%,var(--bg) 55%,#b9b9b3 100%);font-family:"Noto Sans CJK TC",sans-serif;color:var(--ink)}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.28) 100%);pointer-events:none;z-index:5}
+.hud{position:absolute;z-index:6;font-family:"IBM Plex Mono","DejaVu Sans Mono",monospace}
+.hud.tl{left:72px;top:52px;font-family:"Noto Serif CJK TC";font-weight:900;font-size:34px;letter-spacing:.04em}
+.hud.tl span{font-family:"Noto Sans CJK TC";font-weight:500;font-size:22px;color:var(--ink2);margin-left:14px;letter-spacing:.1em}
+.hud.tr{right:72px;top:62px;font-size:20px;letter-spacing:.18em;color:var(--ink2)}
+.hud.bt{left:72px;bottom:40px;font-family:"Noto Sans CJK TC";font-size:20px;color:var(--ink2)}
+.stage{position:absolute;inset:0;perspective:2600px;display:flex;align-items:center;justify-content:center}
+.paper{position:relative;width:1540px;height:800px;background:var(--paper);border:3px solid var(--ink);
+  box-shadow:0 30px 60px rgba(0,0,0,.25),0 6px 14px rgba(0,0,0,.18);padding:70px 90px;overflow:hidden;transform:translateY(40px) rotateX(var(--rx)) rotateZ(var(--rz)) scale(.94)}
+.paper::after{content:"";position:absolute;inset:0;filter:url(#crumple);background:#fff;mix-blend-mode:multiply;opacity:.55;pointer-events:none}
+.kicker{font-family:"IBM Plex Mono","DejaVu Sans Mono",monospace;font-size:22px;letter-spacing:.18em;color:var(--ink2)}
+h1{font-family:"Noto Serif CJK TC";font-weight:900;font-size:76px;line-height:1.15;margin-top:14px}
+.rule{height:3px;background:var(--ink);margin:26px 0 34px;width:100%}
+.big{font-family:"Noto Serif CJK TC";font-weight:900;font-size:150px;line-height:1}
+.unit{font-size:44px;font-weight:700;margin-left:10px}
+.stamp{position:absolute;border:6px solid var(--red);color:var(--red);font-family:"Noto Serif CJK TC";font-weight:900;font-size:64px;padding:6px 26px;transform:rotate(-7deg);letter-spacing:.08em}
+.note{font-size:26px;color:var(--ink2);margin-top:14px}
+.grid9{display:grid;grid-template-columns:repeat(3,128px);gap:14px}
+.cell{height:96px;border:3px solid var(--ink);display:flex;align-items:flex-end;padding:6px 10px;font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:600;
+  background:repeating-linear-gradient(-45deg,transparent 0 9px,rgba(28,28,26,.85) 9px 12px)}
+.cell b{background:var(--paper);padding:0 6px}
+.card{width:300px;height:250px;border:4px solid var(--ink);background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-weight:700;font-size:34px}
+.card svg{width:110px;height:110px}
+.q{font-family:"Noto Serif CJK TC";font-weight:900;font-size:96px}
+.q em{font-style:normal;color:var(--red)}
+.ul{display:inline-block;position:relative}
+.ul::after{content:"";position:absolute;left:-.1em;bottom:-6px;width:calc(100% + .2em);height:8px;background:var(--red)}
+.scene{display:none!important}.scene.on{display:flex!important}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><filter id="crumple" x="0" y="0" width="100%" height="100%">
+<feTurbulence type="fractalNoise" baseFrequency="0.0035" numOctaves="4" seed="7"/>
+<feDiffuseLighting lighting-color="#fff" surfaceScale="3"><feDistantLight azimuth="235" elevation="55"/></feDiffuseLighting></filter></svg>
+<div class="vig"></div>
+<div class="hud tl">MAX 說<span>少子化危機</span></div>
+<div class="hud tr">2015 — 2026</div>
+<div class="hud bt" id="src">資料來源：內政部戶政司</div>
+
+<!-- 1 章節標題 -->
+<div class="stage scene" id="s1" style="--rx:18deg;--rz:-3deg"><div class="paper">
+ <div class="kicker">CHAPTER 01 · BIRTH RATE</div>
+ <h1 style="font-size:132px;margin-top:40px">台灣少子化危機</h1>
+ <div class="rule" style="width:62%"></div>
+ <div style="font-size:44px;font-weight:700;color:var(--ink2)">新生兒人數，<span class="ul" style="color:var(--ink)">正持續惡化</span></div>
+ <div class="stamp" style="right:120px;bottom:110px;font-size:80px">警訊</div>
+</div></div>
+
+<!-- 2 折線 + 數字 -->
+<div class="stage scene" id="s2" style="--rx:22deg;--rz:2deg"><div class="paper">
+ <div class="kicker">ANNUAL BIRTHS · 2015–2025</div>
+ <h1>出生數逐年下滑</h1>
+ <div class="rule"></div>
+ <div style="display:flex;gap:70px;align-items:flex-start">
+  <svg width="860" height="380" viewBox="0 0 860 380">
+   <g stroke="#8d8c86" stroke-width="1.5"><line x1="0" y1="360" x2="860" y2="360"/></g>
+   <polyline fill="none" stroke="#1c1c1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="10,40 96,30 182,70 268,110 354,140 440,180 526,170 612,230"/>
+   <polyline fill="none" stroke="#c4262c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="612,230 698,265 784,300 850,330"/>
+   <circle cx="850" cy="330" r="10" fill="#c4262c"/>
+   <g font-family="IBM Plex Mono,monospace" font-size="20" fill="#55554f"><text x="0" y="352">2015</text><text x="790" y="352">2025</text></g>
+  </svg>
+  <div>
+   <div class="kicker">2025 出生數</div>
+   <div class="big" style="font-size:132px;margin-top:10px">107,812</div>
+   <div class="note">人，<span style="color:var(--red);font-weight:700">歷史新低</span></div>
+  </div>
+ </div>
+ <div class="stamp" style="right:110px;top:70px;font-size:52px">新低</div>
+</div></div>
+
+<!-- 3 九宮格 + 數字 -->
+<div class="stage scene" id="s3" style="--rx:16deg;--rz:-3deg"><div class="paper">
+ <div class="kicker">2026 · JAN–SEP</div>
+ <h1>今年前九個月</h1>
+ <div class="rule"></div>
+ <div style="display:flex;gap:110px;align-items:center">
+  <div class="grid9">
+   <div class="cell"><b>01</b></div><div class="cell"><b>02</b></div><div class="cell"><b>03</b></div>
+   <div class="cell"><b>04</b></div><div class="cell"><b>05</b></div><div class="cell"><b>06</b></div>
+   <div class="cell"><b>07</b></div><div class="cell"><b>08</b></div><div class="cell"><b>09</b></div>
+  </div>
+  <div>
+   <div class="big">69,446<span class="unit">人</span></div>
+   <div class="note" style="font-size:34px;margin-top:22px">全年恐<span class="ul" style="color:var(--ink);font-weight:700">不到七萬人</span></div>
+  </div>
+ </div>
+ <div class="stamp" style="right:110px;bottom:90px">惡化</div>
+</div></div>
+
+<!-- 4 卡片 + 問句 -->
+<div class="stage scene" id="s4" style="--rx:20deg;--rz:3deg"><div class="paper">
+ <div class="kicker">IMPACT</div>
+ <div style="display:flex;gap:40px;margin-top:36px">
+  <div class="card" style="transform:rotate(-3deg)"><svg viewBox="0 0 100 100" fill="none" stroke="#1c1c1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 45 L50 18 L90 45"/><rect x="20" y="45" width="60" height="42"/><rect x="42" y="62" width="16" height="25"/></svg>學校</div>
+  <div class="card" style="transform:rotate(2deg)"><svg viewBox="0 0 100 100" fill="none" stroke="#1c1c1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="28" r="14"/><path d="M22 88 C22 62 78 62 78 88"/></svg>勞動力</div>
+  <div class="card" style="transform:rotate(-1deg)"><svg viewBox="0 0 100 100" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 30 L38 55 L56 40 L88 75" stroke="#c4262c"/><path d="M70 75 L88 75 L88 57" stroke="#c4262c"/></svg>經濟</div>
+ </div>
+ <div class="q" style="margin-top:60px">台灣準備好面對<em>衝擊</em>了嗎<em>？</em></div>
+</div></div>
+
+<script>
+const s=new URLSearchParams(location.search).get('s')||'1';
+document.getElementById('s'+s).classList.add('on');
+const src={1:'資料來源：內政部戶政司',2:'資料來源：內政部戶政司 2015–2025 年出生登記',3:'資料來源：內政部戶政司 2026 年 1–9 月',4:'資料來源：內政部戶政司'};
+document.getElementById('src').textContent=src[s];
+</script>
+</body></html>

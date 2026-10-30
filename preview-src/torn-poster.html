@@ -1,0 +1,98 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--ink:#141414;--paper:#f3ece0;--red:#b0322a;--navy:#2c3e5c;--mustard:#c9a227}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#222}
+#wall{position:absolute;inset:-60px;overflow:hidden}
+.w{position:absolute;filter:url(#rough)}
+.dark #wall{filter:brightness(.62) saturate(.85)}
+.color #wall{filter:brightness(.72)}
+.grunge{position:absolute;inset:0;filter:url(#grime);mix-blend-mode:multiply;opacity:.32;pointer-events:none;z-index:8}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%);z-index:9;pointer-events:none}
+.pc{position:absolute;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)) drop-shadow(0 2px 3px rgba(0,0,0,.4));z-index:4}
+.pc .bg{position:absolute;inset:0}
+.pc .tx{position:relative;font-family:"Noto Sans CJK TC";font-weight:900;color:var(--ink)}
+.ink{filter:url(#wornink)}
+.tape{position:absolute;width:150px;height:46px;background:rgba(232,224,200,.82);z-index:6;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.scene{display:none}.scene.on{display:block}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute">
+ <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComposite in="g" in2="SourceAlpha" operator="in" result="gm"/><feBlend in="SourceGraphic" in2="gm" mode="multiply"/></filter>
+ <filter id="grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="5" seed="11"/><feColorMatrix type="matrix" values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 -1.6 1.25"/></filter>
+ <filter id="wornink"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="2" seed="5" result="t"/><feColorMatrix in="t" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.9" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+</svg>
+<div id="root"><div id="wall"></div><div id="fg"></div><div class="grunge"></div><div class="vig"></div></div>
+<script>
+let seed=1;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
+function torn(amp=10,step=14){ // returns clip-path polygon in %, on a 1000x1000 box
+  const pts=[];const e=(a,b,n,f)=>{for(let i=0;i<=n;i++){const t=i/n;pts.push(f(t,(rnd()-.5)*amp))}};
+  const n=Math.round(1000/step);
+  e(0,0,n,(t,j)=>[t*1000,Math.max(0,8+j)]); e(0,0,n,(t,j)=>[Math.min(1000,992+j),t*1000]);
+  e(0,0,n,(t,j)=>[1000-t*1000,Math.min(1000,992+j)]); e(0,0,n,(t,j)=>[Math.max(0,8+j),1000-t*1000]);
+  return 'polygon('+pts.map(p=>(p[0]/10).toFixed(2)+'% '+(p[1]/10).toFixed(2)+'%').join(',')+')';
+}
+function wall(dark,flip){
+  const W=document.getElementById('wall');W.innerHTML='';
+  const pal=dark?['#2c3e5c','#23324b','#34486a','#1f2b40','#3a3f48','#b0322a','#e9e1d1']:['#c9a227','#b0322a','#2c3e5c','#e9e1d1','#d8cdb5','#8a2a24','#a8862a'];
+  for(let i=0;i<70;i++){
+    const d=document.createElement('div');d.className='w';
+    const w=180+rnd()*420,h=220+rnd()*480;
+    d.style.cssText=`left:${rnd()*2000-100}px;top:${rnd()*1200-120}px;width:${w}px;height:${h}px;background:${pal[Math.floor(rnd()*pal.length)]};transform:rotate(${(rnd()-.5)*16}deg);clip-path:${torn(26,22)}`;
+    // halftone/stripe detail on some
+    if(rnd()<.35) d.style.backgroundImage='radial-gradient(rgba(0,0,0,.18) 1.5px,transparent 1.6px)',d.style.backgroundSize='9px 9px';
+    if(rnd()<.2){const l=document.createElement('div');l.style.cssText=`position:absolute;left:12%;right:12%;top:${20+rnd()*50}%;height:${10+rnd()*30}px;background:rgba(0,0,0,.18)`;d.appendChild(l)}
+    W.appendChild(d);
+  }
+  if(flip) W.style.transform='scaleX(-1)';
+}
+function piece(o){ // {x,y,w,h,r,color,html,cls}
+  const p=document.createElement('div');p.className='pc';
+  p.style.cssText=`left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px;transform:rotate(${o.r||0}deg)`;
+  p.innerHTML=`<div class="bg" style="background:${o.color||'var(--paper)'};clip-path:${torn(o.amp||14,12)}"></div><div class="tx ink" style="${o.style||''}">${o.html||''}</div>`;
+  document.getElementById('fg').appendChild(p);return p;
+}
+function tape(x,y,r){const t=document.createElement('div');t.className='tape';t.style.cssText=`left:${x}px;top:${y}px;transform:rotate(${r}deg);clip-path:${torn(40,30)}`;document.getElementById('fg').appendChild(t)}
+const icon={
+ school:'<svg viewBox="0 0 100 100" width="150" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 45 L50 18 L90 45"/><rect x="20" y="45" width="60" height="42"/><rect x="42" y="62" width="16" height="25"/></svg>',
+ person:'<svg viewBox="0 0 100 100" width="150" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"><circle cx="50" cy="30" r="15"/><path d="M20 90 C20 60 80 60 80 90"/></svg>',
+ down:'<svg viewBox="0 0 100 100" width="150" fill="none" stroke="#141414" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 28 L38 56 L56 40 L88 74"/><path d="M68 74 L88 74 L88 54"/></svg>',
+ baby:'<svg viewBox="0 0 60 80" width="110"><circle cx="30" cy="18" r="14" fill="#efe6d4"/><path d="M10 78 C10 40 50 40 50 78 Z" fill="#efe6d4"/></svg>'
+};
+const S=new URLSearchParams(location.search).get('s')||'1';
+const R=document.body;
+if(S==='1'){ seed=21;R.className='dark';wall(true,false);
+  piece({x:250,y:250,w:1300,h:330,r:-3,amp:18,style:'font-size:170px;line-height:330px;text-align:center;letter-spacing:.04em',html:'台灣少子化'});
+  tape(230,230,-30);tape(1440,240,28);
+  piece({x:640,y:600,w:760,h:150,r:4,color:'var(--red)',amp:12,style:'font-size:84px;line-height:150px;text-align:center;color:#f3ece0',html:'正持續惡化'});
+  piece({x:1450,y:740,w:300,h:160,r:-7,style:'font-size:64px;line-height:160px;text-align:center',html:'危機？'});
+}
+if(S==='2'){ seed=33;R.className='color';wall(false,false);
+  piece({x:180,y:170,w:520,h:200,r:-5,style:'font-size:140px;line-height:200px;text-align:center',html:'2025'});
+  tape(150,160,-24);
+  piece({x:420,y:420,w:1200,h:330,r:2,amp:18,style:'font-size:220px;line-height:330px;text-align:center;font-family:Noto Sans CJK TC',html:'107,812'});
+  tape(1520,400,22);tape(400,720,-18);
+  piece({x:1150,y:770,w:640,h:150,r:-4,color:'var(--red)',style:'font-size:84px;line-height:150px;text-align:center;color:#f3ece0',html:'歷史新低'});
+  piece({x:1350,y:160,w:380,h:140,r:7,style:'font-size:44px;line-height:140px;text-align:center;font-weight:700',html:'出生人數 ／ 人'});
+}
+if(S==='3'){ seed=47;R.className='dark';wall(true,true);
+  piece({x:140,y:200,w:420,h:180,r:-4,style:'font-size:120px;line-height:180px;text-align:center',html:'2026'});
+  const g=piece({x:160,y:430,w:560,h:520,r:3,amp:12,style:'padding:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:100%'});
+  g.querySelector('.tx').innerHTML=[1,2,3,4,5,6,7,8,9].map(m=>`<div style="border:6px solid #141414;display:flex;align-items:center;justify-content:center;font-size:58px">${m}月</div>`).join('');
+  tape(140,410,-22);tape(640,430,26);
+  piece({x:830,y:330,w:980,h:320,r:-2,amp:18,style:'font-size:220px;line-height:320px;text-align:center',html:'69,446'});
+  piece({x:960,y:690,w:760,h:150,r:3,color:'var(--red)',style:'font-size:80px;line-height:150px;text-align:center;color:#f3ece0',html:'不到七萬人'});
+}
+if(S==='4'){ seed=59;R.className='color';wall(false,true);
+  piece({x:170,y:150,w:420,h:540,r:-6,color:'var(--red)',amp:16,style:'height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;color:#fff;font-size:76px',html:icon.school+'學校'});
+  piece({x:640,y:190,w:420,h:540,r:4,color:'var(--navy)',amp:16,style:'height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;color:#fff;font-size:76px',html:icon.person+'勞動力'});
+  piece({x:1110,y:140,w:420,h:540,r:-3,color:'var(--mustard)',amp:16,style:'height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;color:#141414;font-size:76px',html:icon.down+'經濟'});
+  tape(280,130,-12);tape(760,170,10);tape(1230,120,-8);
+  piece({x:1180,y:600,w:620,h:400,r:5,amp:14,style:'height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center',html:'<div style="font-size:48px;font-weight:700">台灣準備好面對</div><div style="font-size:160px;line-height:1.05">衝擊<span style="color:#b0322a">？</span></div>'});
+  tape(1170,590,-30);
+  for(let i=0;i<6;i++){const b=document.createElement('div');b.style.cssText=`position:absolute;left:${200+i*130}px;top:${800+(i%2)*40}px;transform:rotate(${(i-3)*9}deg);opacity:${1-i*.12};z-index:5;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))`;b.innerHTML=icon.baby;document.getElementById('fg').appendChild(b)}
+}
+// source note on tape
+const n=document.createElement('div');n.className='tape';n.style.cssText+='left:60px;top:1000px;width:520px;height:44px;transform:rotate(-1.5deg);font-family:Noto Sans CJK TC;font-weight:700;font-size:20px;line-height:44px;padding-left:20px;color:#141414';n.textContent='資料來源：內政部戶政司';document.getElementById('fg').appendChild(n);
+</script>
+</body></html>
