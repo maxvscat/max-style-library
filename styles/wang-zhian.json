@@ -4,23 +4,62 @@
   "subtitle": "新聞紙張說明風",
   "status": "已完成成片",
   "added": "2026-10-28",
-  "ratio": ["16:9"],
+  "ratio": [
+    "16:9"
+  ],
   "needsAssets": false,
-  "bestFor": ["時事解析", "數據新聞", "調查報導"],
+  "bestFor": [
+    "時事解析",
+    "數據新聞",
+    "調查報導"
+  ],
   "reference": "王志安節目〈一櫃合肥咖啡杯的太平洋漂流〉章節片段，111 秒",
   "mood": "冷靜、像攤在桌上的調查檔案。黑白為主，紅色只出現在下判定的地方。",
   "colors": [
-    { "name": "墨色", "hex": "#1c1c1a", "role": "主文字、紙張邊框" },
-    { "name": "次要文字", "hex": "#55554f", "role": "內文" },
-    { "name": "灰", "hex": "#8d8c86", "role": "註記、來源" },
-    { "name": "紙張", "hex": "#f7f6f1", "role": "紙張底色" },
-    { "name": "背景", "hex": "#d8d8d3", "role": "桌面背景（徑向漸層加暗角）" },
-    { "name": "判定紅", "hex": "#c4262c", "role": "只用在印章、下跌線、百分比標籤、底線" }
+    {
+      "name": "墨色",
+      "hex": "#1c1c1a",
+      "role": "主文字、紙張邊框"
+    },
+    {
+      "name": "次要文字",
+      "hex": "#55554f",
+      "role": "內文"
+    },
+    {
+      "name": "灰",
+      "hex": "#8d8c86",
+      "role": "註記、來源"
+    },
+    {
+      "name": "紙張",
+      "hex": "#f7f6f1",
+      "role": "紙張底色"
+    },
+    {
+      "name": "背景",
+      "hex": "#d8d8d3",
+      "role": "桌面背景（徑向漸層加暗角）"
+    },
+    {
+      "name": "判定紅",
+      "hex": "#c4262c",
+      "role": "只用在印章、下跌線、百分比標籤、底線"
+    }
   ],
   "fonts": [
-    { "role": "標題", "family": "Noto Serif CJK TC Black（900）" },
-    { "role": "內文", "family": "Noto Sans CJK TC" },
-    { "role": "日期、英文小標", "family": "IBM Plex Mono（字距 .18em）" }
+    {
+      "role": "標題",
+      "family": "Noto Serif CJK TC Black（900）"
+    },
+    {
+      "role": "內文",
+      "family": "Noto Sans CJK TC"
+    },
+    {
+      "role": "日期、英文小標",
+      "family": "IBM Plex Mono（字距 .18em）"
+    }
   ],
   "layout": [
     "紙張 1540×800，3px 墨色邊框，雙層投影",
@@ -47,8 +86,19 @@
   "ending": "大字問句或結論加紅色「？」，配音念完後多留約 0.5 秒",
   "assets": [],
   "examples": [
-    { "title": "台灣少子化危機 15 秒開場", "date": "2026-10-28", "desc": "四個場景：章節標題、歷年折線＋數字、九宮格月份＋數字、卡片＋問句" }
+    {
+      "title": "台灣少子化危機 15 秒開場",
+      "date": "2026-10-28",
+      "desc": "四個場景：章節標題、歷年折線＋數字、九宮格月份＋數字、卡片＋問句"
+    }
   ],
-  "previews": [],
-  "notes": []
+  "previews": [
+    "previews/wang-zhian/01.jpg",
+    "previews/wang-zhian/02.jpg",
+    "previews/wang-zhian/03.jpg",
+    "previews/wang-zhian/04.jpg"
+  ],
+  "notes": [
+    "樣張是照風格規格重畫的定格（少子化開場四個場景），不是從成片截圖；之後拿到成片再換"
+  ]
 }
