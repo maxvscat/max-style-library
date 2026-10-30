@@ -1,0 +1,57 @@
+{
+  "id": "swiss-data-grid",
+  "name": "瑞士網格數據風",
+  "subtitle": "數據簡報",
+  "status": "定格樣張",
+  "added": "2026-10-31",
+  "ratio": ["16:9"],
+  "needsAssets": false,
+  "bestFor": ["科普", "數據比較", "議題解析", "知識型短片"],
+  "reference": "原創風格，沒有參考片",
+  "mood": "乾淨、理性、像設計精良的雜誌數據頁。大量留白，靠網格和字級建立秩序，只用一個強調色。",
+  "colors": [
+    { "name": "米白紙", "hex": "#f2f0ea", "role": "底色" },
+    { "name": "墨黑", "hex": "#121212", "role": "主文字、框線" },
+    { "name": "次要灰", "hex": "#7a7770", "role": "說明、轉折句" },
+    { "name": "色塊底", "hex": "#e6e2d8", "role": "長條圖軌道" },
+    { "name": "橘紅（--accent）", "hex": "#ff4f1a", "role": "唯一強調色：關鍵數字、結論、最重要的一步" }
+  ],
+  "fonts": [
+    { "role": "中文", "family": "Noto Sans CJK TC Black／Bold／Medium" },
+    { "role": "數字、元素符號", "family": "Oswald 700" },
+    { "role": "英文小標、刻度、來源", "family": "IBM Plex Mono" }
+  ],
+  "layout": [
+    "1920×1080，全畫面 144px 間距網格細線，左右邊界 96px",
+    "頂部 HUD：橘紅小方塊、DATA BRIEF 加主題名，右邊日期，下方 2px 黑線",
+    "底部 HUD：左邊來源小字，右邊頁碼 01 / 04",
+    "每個場景左上：橘紅等寬小標，下面 96～150px 粗黑標題，靠左對齊網格"
+  ],
+  "components": [
+    "元素週期表方塊：粗黑框、原子序、超大符號（強調色）",
+    "流程圖：方塊 → 箭頭步驟 → 方塊，結果方塊反白成黑底",
+    "對數橫條圖：標籤欄 + 軌道長條 + 等寬刻度軸，右上放倍數結論",
+    "結論頁：強調色底線（text-decoration）+ 灰色轉折句 + 底部三欄數據列"
+  ],
+  "texture": "",
+  "camera": "",
+  "transition": "整頁往上推 120px 並淡出，下一頁從下方推入（0.4 秒），HUD 不動、頁碼翻動",
+  "motion": [
+    "網格細線開場從左到右畫出（0.6 秒）",
+    "標題逐字往上浮出並淡入（y 30→0，stagger 0.05），小標打字效果",
+    "方塊外框用 strokeDashoffset 畫出，流程箭頭依序延伸",
+    "長條圖從 0 長到目標寬度（power3.out，0.8 秒），數值同步滾動"
+  ],
+  "ending": "結論頁停約 1 秒，強調色底線最後才畫出來，當作收尾的重音",
+  "assets": [],
+  "examples": [
+    { "title": "黃金能被人工製造嗎", "date": "2026-10-31", "desc": "標題加 Au 方塊 → 汞變金流程 → CERN 29 皮克 vs 全球年產 3,300 噸對數比例尺 → 可行，但還太貴" }
+  ],
+  "previews": [
+    "previews/swiss-data-grid/01.jpg",
+    "previews/swiss-data-grid/02.jpg",
+    "previews/swiss-data-grid/03.jpg",
+    "previews/swiss-data-grid/04.jpg"
+  ],
+  "notes": ["會跟著字數變長的底線一律用 text-decoration，不要用絕對定位色塊"]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "election-bulletin",
+  "name": "選舉戰報風",
+  "subtitle": "直式快訊",
+  "status": "定格樣張",
+  "added": "2026-10-31",
+  "ratio": ["9:16"],
+  "needsAssets": false,
+  "bestFor": ["選舉資訊", "投票須知", "政見重點", "活動倒數", "Reels／Shorts"],
+  "reference": "原創風格，沒有參考片",
+  "mood": "像新聞台的快訊跑馬燈加運動賽事看板，急、直接、一眼看懂。黑底配一個高彩度強調色。",
+  "colors": [
+    { "name": "墨黑", "hex": "#0b0d12", "role": "底色" },
+    { "name": "卡片", "hex": "#151923", "role": "時間卡、清單列" },
+    { "name": "主文字", "hex": "#f5f4ee", "role": "大字、數字" },
+    { "name": "次要灰", "hex": "#8b919c", "role": "說明、日期" },
+    { "name": "訊號黃（--accent）", "hex": "#ffd400", "role": "強調色，可換成客戶品牌色" },
+    { "name": "警示紅", "hex": "#ff3b30", "role": "只用在 LIVE 點、必帶標籤、截止時間" }
+  ],
+  "fonts": [
+    { "role": "中文", "family": "Noto Sans CJK TC Black／Bold／Medium" },
+    { "role": "大數字", "family": "Oswald 700（窄體，日期和倒數）" },
+    { "role": "英文小標、日期", "family": "IBM Plex Mono（字距 .24em 以上）" }
+  ],
+  "layout": [
+    "1080×1920，內容區 y 320～1500，左右邊界 72px",
+    "頂部 HUD：黃底黑字「戰報」方塊加等寬 BULLETIN，右邊紅點加日期與期數，下方細線前 140px 為黃色",
+    "底部跑馬燈在 y≈1536（底部留 300px 給平台介面），黃底黑字，左側「快訊」標籤，項目用 ▸ 隔開",
+    "每個場景頂部一行黃色等寬英文小標（COUNTDOWN、CHECKLIST…）",
+    "背景：微弱黃色徑向光暈、-28° 細斜線紋理、四周暗角"
+  ],
+  "components": [
+    "超大日期或數字（Oswald 400～620px），中文單位字用強調色",
+    "黃黑斜紋警示帶當段落分隔",
+    "黃色實心標語塊（結論句）與黃框標籤塊（副標）",
+    "日曆格：已過填黃、目標日填紅",
+    "時間卡：左側粗色條（開始黃、截止紅），右邊 Oswald 大字時間",
+    "清單列：方形勾選框、粗體品項加灰色說明、紅色「必帶」標籤"
+  ],
+  "texture": "",
+  "camera": "",
+  "transition": "黃色斜切色塊從右下掃過整個畫面（0.3 秒），離開時露出下一個場景",
+  "motion": [
+    "跑馬燈全程等速往左捲動",
+    "大數字砸入：scale 1.4→1、y −40→0，0.2 秒 power4.out，落地時場景震 4–8px",
+    "倒數數字從大數滾到目標值；日曆格依序點亮（stagger 0.02）",
+    "警示帶、時間卡、清單列從左側抹入",
+    "勾選框依配音逐一打勾（strokeDashoffset）"
+  ],
+  "ending": "黃色標語塊寫行動呼籲（例如「11/28 一起去投票」），停約 1 秒",
+  "assets": [],
+  "examples": [
+    { "title": "九合一投票須知", "date": "2026-10-31", "desc": "11/28 投票日 → 倒數 28 天 → 投票時間 08:00–16:00 → 出門前檢查清單（資料來源：中選會、數位時代）" }
+  ],
+  "previews": [
+    "previews/election-bulletin/01.jpg",
+    "previews/election-bulletin/02.jpg",
+    "previews/election-bulletin/03.jpg",
+    "previews/election-bulletin/04.jpg"
+  ],
+  "notes": ["強調色刻意用中性的黃，避開政黨色；接候選人案子時只改 --accent"]
+}
