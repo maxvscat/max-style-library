@@ -2,24 +2,55 @@
   "id": "swiss-data-grid",
   "name": "瑞士網格數據風",
   "subtitle": "數據簡報",
-  "status": "定格樣張",
   "added": "2026-10-31",
-  "ratio": ["16:9"],
-  "needsAssets": false,
-  "bestFor": ["科普", "數據比較", "議題解析", "知識型短片"],
+  "bestFor": [
+    "科普",
+    "數據比較",
+    "議題解析",
+    "知識型短片"
+  ],
   "reference": "原創風格，沒有參考片",
   "mood": "乾淨、理性、像設計精良的雜誌數據頁。大量留白，靠網格和字級建立秩序，只用一個強調色。",
   "colors": [
-    { "name": "米白紙", "hex": "#f2f0ea", "role": "底色" },
-    { "name": "墨黑", "hex": "#121212", "role": "主文字、框線" },
-    { "name": "次要灰", "hex": "#7a7770", "role": "說明、轉折句" },
-    { "name": "色塊底", "hex": "#e6e2d8", "role": "長條圖軌道" },
-    { "name": "橘紅（--accent）", "hex": "#ff4f1a", "role": "唯一強調色：關鍵數字、結論、最重要的一步" }
+    {
+      "name": "米白紙",
+      "hex": "#f2f0ea",
+      "role": "底色"
+    },
+    {
+      "name": "墨黑",
+      "hex": "#121212",
+      "role": "主文字、框線"
+    },
+    {
+      "name": "次要灰",
+      "hex": "#7a7770",
+      "role": "說明、轉折句"
+    },
+    {
+      "name": "色塊底",
+      "hex": "#e6e2d8",
+      "role": "長條圖軌道"
+    },
+    {
+      "name": "橘紅（--accent）",
+      "hex": "#ff4f1a",
+      "role": "唯一強調色：關鍵數字、結論、最重要的一步"
+    }
   ],
   "fonts": [
-    { "role": "中文", "family": "Noto Sans CJK TC Black／Bold／Medium" },
-    { "role": "數字、元素符號", "family": "Oswald 700" },
-    { "role": "英文小標、刻度、來源", "family": "IBM Plex Mono" }
+    {
+      "role": "中文",
+      "family": "Noto Sans CJK TC Black／Bold／Medium"
+    },
+    {
+      "role": "數字、元素符號",
+      "family": "Oswald 700"
+    },
+    {
+      "role": "英文小標、刻度、來源",
+      "family": "IBM Plex Mono"
+    }
   ],
   "layout": [
     "1920×1080，全畫面 144px 間距網格細線，左右邊界 96px",
@@ -43,9 +74,12 @@
     "長條圖從 0 長到目標寬度（power3.out，0.8 秒），數值同步滾動"
   ],
   "ending": "結論頁停約 1 秒，強調色底線最後才畫出來，當作收尾的重音",
-  "assets": [],
   "examples": [
-    { "title": "黃金能被人工製造嗎", "date": "2026-10-31", "desc": "標題加 Au 方塊 → 汞變金流程 → CERN 29 皮克 vs 全球年產 3,300 噸對數比例尺 → 可行，但還太貴" }
+    {
+      "title": "黃金能被人工製造嗎",
+      "date": "2026-10-31",
+      "desc": "標題加 Au 方塊 → 汞變金流程 → CERN 29 皮克 vs 全球年產 3,300 噸對數比例尺 → 可行，但還太貴"
+    }
   ],
   "previews": [
     "previews/swiss-data-grid/01.jpg",
@@ -53,5 +87,7 @@
     "previews/swiss-data-grid/03.jpg",
     "previews/swiss-data-grid/04.jpg"
   ],
-  "notes": ["會跟著字數變長的底線一律用 text-decoration，不要用絕對定位色塊"]
+  "notes": [
+    "會跟著字數變長的底線一律用 text-decoration，不要用絕對定位色塊"
+  ]
 }

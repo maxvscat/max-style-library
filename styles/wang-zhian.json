@@ -2,12 +2,7 @@
   "id": "wang-zhian",
   "name": "王志安風格",
   "subtitle": "新聞紙張說明風",
-  "status": "已完成成片",
   "added": "2026-10-28",
-  "ratio": [
-    "16:9"
-  ],
-  "needsAssets": false,
   "bestFor": [
     "時事解析",
     "數據新聞",
@@ -84,7 +79,6 @@
     "線稿卡片從上方落下（back.out），最後一句時橫向震一下"
   ],
   "ending": "大字問句或結論加紅色「？」，配音念完後多留約 0.5 秒",
-  "assets": [],
   "examples": [
     {
       "title": "台灣少子化危機 15 秒開場",
@@ -99,6 +93,6 @@
     "previews/wang-zhian/04.jpg"
   ],
   "notes": [
-    "樣張是照風格規格重畫的定格（少子化開場四個場景），不是從成片截圖；原始碼在 preview-src/wang-zhian.html，之後拿到成片再換"
+    "樣張原始碼在 preview-src/wang-zhian.html"
   ]
 }

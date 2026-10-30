@@ -1,13 +1,12 @@
 /* MAX 風格庫：純前端，資料來自 styles/*.json */
 const CONFIG = { owner: "maxvscat", repo: "max-style-library", branch: "main" };
 const GH = `https://github.com/${CONFIG.owner}/${CONFIG.repo}`;
-const STATUS = ["已完成成片", "定格樣張", "規劃中"];
 
 const app = document.getElementById("app");
 document.getElementById("repo-link").href = GH;
 
 let STYLES = [];
-const FILTER = { q: "", ratio: "全部", assets: "全部", status: "全部" };
+const FILTER = { q: "" };
 
 /* ---------- 工具 ---------- */
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -55,14 +54,21 @@ async function loadStyles() {
 }
 
 /* ---------- 縮圖：有樣張用樣張，沒有就用配色自動產生 ---------- */
+/* 樣張可以是任何比例：直式圖會自動改成置中完整顯示 */
+function fitImgs(root) {
+  root.querySelectorAll("img[data-fit]").forEach(img => {
+    const apply = () => {
+      if (img.naturalHeight > img.naturalWidth) {
+        img.closest(".thumb")?.classList.add("portrait");
+        img.closest(".gallery")?.classList.add("portrait");
+      }
+    };
+    img.complete ? apply() : img.addEventListener("load", apply, { once: true });
+  });
+}
 function thumb(s) {
-  const portrait = (s.ratio || []).includes("9:16") && !(s.ratio || []).includes("16:9");
-  const badges = `<div class="badge-row">
-      ${(s.ratio || []).map(r => `<span class="badge">${esc(r)}</span>`).join("")}
-      <span class="badge ${s.status === "已完成成片" ? "ok" : s.status === "定格樣張" ? "warn" : ""}">${esc(s.status || "")}</span>
-    </div>`;
   if (s.previews && s.previews.length) {
-    return `<div class="thumb ${portrait ? "portrait" : ""}"><img loading="lazy" src="${esc(s.previews[0])}" alt="${esc(s.name)} 樣張">${badges}</div>`;
+    return `<div class="thumb"><img data-fit loading="lazy" src="${esc(s.previews[0])}" alt="${esc(s.name)} 樣張"></div>`;
   }
   const cols = (s.colors || []).map(c => c.hex).filter(Boolean);
   const bg = cols[0] || "#222", fg = lum(bg) > 0.55 ? "#111" : "#fff";
@@ -71,53 +77,33 @@ function thumb(s) {
       <div class="bands">${cols.map(c => `<i style="background:${esc(c)}"></i>`).join("")}</div>
       <div class="label" style="background:${esc(bg)};color:${fg};border-left:8px solid ${esc(accent)}">${esc(s.name)}</div>
       <div class="hint" style="color:${fg};background:${esc(bg)};padding:2px 6px;align-self:flex-start">PREVIEW 待補</div>
-    </div>${badges}</div>`;
+    </div></div>`;
 }
 
 /* ---------- 首頁 ---------- */
 function viewHome() {
-  const total = STYLES.length;
-  const done = STYLES.filter(s => s.status === "已完成成片").length;
-  const vert = STYLES.filter(s => (s.ratio || []).includes("9:16")).length;
-  const chipGroup = (key, opts) => `<div class="chips">${opts.map(o => `<button class="chip ${FILTER[key] === o ? "on" : ""}" data-k="${key}" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
   app.innerHTML = `
     <section class="hero">
       <div>
         <h1>AI 剪輯<em>風格庫</em></h1>
-        <p>每個風格的配色、字體、版面、動態語彙和樣張都在這裡。點卡片看細節，右上角可以新增風格。</p>
+        <p>每個風格的配色、字體、版面、動態語彙和樣張都在這裡，任何解析度都能套用。點卡片看細節，右上角可以新增風格。</p>
       </div>
       <div class="stats">
-        <div class="stat"><b>${total}</b><span>STYLES</span></div>
-        <div class="stat"><b>${done}</b><span>已完成成片</span></div>
-        <div class="stat"><b>${vert}</b><span>有直式版</span></div>
+        <div class="stat"><b>${STYLES.length}</b><span>STYLES</span></div>
       </div>
     </section>
     <section class="filters">
       <input id="q" type="search" placeholder="搜尋風格、用途、顏色…" value="${esc(FILTER.q)}">
-      ${chipGroup("ratio", ["全部", "16:9", "9:16"])}
-      <span class="sep"></span>
-      ${chipGroup("assets", ["全部", "純程式", "需要素材"])}
-      <span class="sep"></span>
-      ${chipGroup("status", ["全部", ...STATUS])}
     </section>
     <section class="grid" id="grid"></section>`;
   const q = document.getElementById("q");
   q.addEventListener("input", () => { FILTER.q = q.value; renderGrid(); });
-  app.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
-    FILTER[b.dataset.k] = b.dataset.v;
-    app.querySelectorAll(`.chip[data-k="${b.dataset.k}"]`).forEach(x => x.classList.toggle("on", x === b));
-    renderGrid();
-  }));
   renderGrid();
 }
 function renderGrid() {
   const g = document.getElementById("grid");
   const q = FILTER.q.trim().toLowerCase();
   const items = STYLES.filter(s => {
-    if (FILTER.ratio !== "全部" && !(s.ratio || []).includes(FILTER.ratio)) return false;
-    if (FILTER.assets === "純程式" && s.needsAssets) return false;
-    if (FILTER.assets === "需要素材" && !s.needsAssets) return false;
-    if (FILTER.status !== "全部" && s.status !== FILTER.status) return false;
     if (q && !JSON.stringify(s).toLowerCase().includes(q)) return false;
     return true;
   });
@@ -128,16 +114,16 @@ function renderGrid() {
       <div class="card-body">
         <h3>${esc(s.name)}<small>${esc(s.subtitle || "")}</small></h3>
         <div class="dots">${(s.colors || []).slice(0, 8).map(c => `<i title="${esc(c.name)} ${esc(c.hex)}" style="background:${esc(c.hex)}"></i>`).join("")}</div>
-        <div class="tags">${(s.bestFor || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join("")}${s.needsAssets ? `<span class="tag">需要圖像素材</span>` : ""}</div>
+        <div class="tags">${(s.bestFor || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
       </div>
     </a>`).join("");
+  fitImgs(g);
 }
 
 /* ---------- 詳細頁 ---------- */
 function viewDetail(id) {
   const s = STYLES.find(x => x.id === id);
   if (!s) { app.innerHTML = `<a class="back" href="#/">← 回到全部風格</a><p class="empty">找不到這個風格（${esc(id)}）</p>`; return; }
-  const portrait = (s.ratio || []).includes("9:16") && !(s.ratio || []).includes("16:9");
   const sec = (title, body) => body ? `<section class="sec"><h2>${title}</h2>${body}</section>` : "";
   app.innerHTML = `
     <a class="back" href="#/">← 回到全部風格</a>
@@ -145,9 +131,6 @@ function viewDetail(id) {
       <div>
         <h1>${esc(s.name)}<small>${esc(s.subtitle || "")}</small></h1>
         <div class="meta">
-          ${(s.ratio || []).map(r => `<span class="tag">${esc(r)}</span>`).join("")}
-          <span class="tag">${esc(s.status || "")}</span>
-          <span class="tag">${s.needsAssets ? "需要圖像素材" : "純程式繪製"}</span>
           <span class="tag">新增於 ${esc(s.added || "")}</span>
         </div>
       </div>
@@ -159,7 +142,7 @@ function viewDetail(id) {
     </div>
     <p class="mood">${esc(s.mood || "")}</p>
     ${s.previews && s.previews.length
-      ? `<div class="gallery ${portrait ? "portrait" : "landscape"}">${s.previews.map(p => `<a href="${esc(p)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(p)}" alt=""></a>`).join("")}</div>`
+      ? `<div class="gallery">${s.previews.map(p => `<a href="${esc(p)}" target="_blank" rel="noopener"><img data-fit loading="lazy" src="${esc(p)}" alt=""></a>`).join("")}</div>`
       : `<div class="no-preview">還沒有樣張圖。按「上傳樣張圖」把圖放進 <code>previews/${esc(s.id)}/</code>，再把路徑加進 JSON 的 <code>previews</code> 欄位。</div>`}
     <div class="sections">
       ${sec("PALETTE · 顏色", `<div class="palette">${(s.colors || []).map(c => `
@@ -173,10 +156,11 @@ function viewDetail(id) {
       ${sec("CAMERA · 運鏡", s.camera ? `<p>${esc(s.camera)}</p>` : "")}
       ${sec("TEXTURE · 質感", s.texture ? `<p>${esc(s.texture)}</p>` : "")}
       ${sec("ENDING · 結尾", s.ending ? `<p>${esc(s.ending)}</p>` : "")}
-      ${sec("ASSETS · 圖像素材", s.assets && s.assets.length ? list(s.assets) : "")}
       ${sec("EXAMPLES · 範例專案", (s.examples || []).length ? `<ul>${s.examples.map(e => `<li class="example"><b>${esc(e.title)}</b><small>${esc(e.date || "")}</small><div>${esc(e.desc || "")}</div></li>`).join("")}</ul>` : "")}
       ${sec("NOTES · 注意事項", s.notes && s.notes.length ? list(s.notes) : "")}
-    </div>`;
+    </div>
+    <p class="scale-note">文中的像素值以參考畫面為基準（橫式 1920 寬、直式 1080 寬），套用到其他解析度或比例時等比例換算、重新排版即可。</p>`;
+  fitImgs(app);
   app.querySelectorAll("[data-copy]").forEach(el => el.addEventListener("click", () => copy(el.dataset.copy)));
 }
 
@@ -197,7 +181,6 @@ const FIELDS = [
   ["camera", "運鏡", "input", ""],
   ["texture", "質感", "input", ""],
   ["ending", "結尾", "input", ""],
-  ["assets", "圖像素材", "textarea", "需要的素材，一行一個（純程式可留空）"],
   ["examples", "範例專案", "textarea", "一行一個：標題|日期|說明"],
   ["previews", "樣張圖片路徑", "textarea", "一行一個，例如 previews/neon-night-market/01.jpg"],
   ["notes", "注意事項", "textarea", "一行一點"]
@@ -211,7 +194,7 @@ function toForm(s) {
     fonts: (s.fonts || []).map(f => [f.role, f.family].join("|")).join("\n"),
     layout: j(s.layout), components: j(s.components), motion: j(s.motion),
     transition: s.transition || "", camera: s.camera || "", texture: s.texture || "", ending: s.ending || "",
-    assets: j(s.assets), examples: (s.examples || []).map(e => [e.title, e.date, e.desc].join("|")).join("\n"),
+    examples: (s.examples || []).map(e => [e.title, e.date, e.desc].join("|")).join("\n"),
     previews: j(s.previews), notes: j(s.notes)
   };
 }
@@ -220,20 +203,20 @@ function fromForm(f, extra) {
   return {
     id: (f.id || "").trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, ""),
     name: f.name.trim(), subtitle: f.subtitle.trim(),
-    status: extra.status, added: extra.added, ratio: extra.ratio, needsAssets: extra.needsAssets,
+    added: extra.added,
     bestFor: f.bestFor.split(/[,，、]/).map(t => t.trim()).filter(Boolean),
     reference: f.reference.trim(), mood: f.mood.trim(),
     colors: split(f.colors, ["name", "hex", "role"]), fonts: split(f.fonts, ["role", "family"]),
     layout: lines(f.layout), components: lines(f.components),
     texture: f.texture.trim(), camera: f.camera.trim(), transition: f.transition.trim(),
-    motion: lines(f.motion), ending: f.ending.trim(), assets: lines(f.assets),
+    motion: lines(f.motion), ending: f.ending.trim(),
     examples: split(f.examples, ["title", "date", "desc"]), previews: lines(f.previews), notes: lines(f.notes)
   };
 }
 function viewForm(id) {
   const editing = id ? STYLES.find(x => x.id === id) : null;
   if (id && !editing) { viewDetail(id); return; }
-  const base = editing || { status: "規劃中", added: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10), ratio: ["16:9"], needsAssets: false };
+  const base = editing || { added: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10) };
   const f = toForm(base);
   app.innerHTML = `
     <a class="back" href="${editing ? `#/s/${encodeURIComponent(id)}` : "#/"}">← 返回</a>
@@ -245,20 +228,7 @@ function viewForm(id) {
     </ol></div>
     <div class="form-wrap">
       <form class="form" id="f" onsubmit="return false">
-        <div class="row2">
-          <div class="field"><label>狀態</label><select id="status">${STATUS.map(o => `<option ${base.status === o ? "selected" : ""}>${o}</option>`).join("")}</select></div>
-          <div class="field"><label>新增日期</label><input id="added" type="date" value="${esc(base.added)}"></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label>畫面比例</label>
-            <label style="font-weight:400"><input type="checkbox" class="ratio" value="16:9" ${(base.ratio || []).includes("16:9") ? "checked" : ""} style="width:auto"> 16:9 橫式</label>
-            <label style="font-weight:400"><input type="checkbox" class="ratio" value="9:16" ${(base.ratio || []).includes("9:16") ? "checked" : ""} style="width:auto"> 9:16 直式</label>
-            <label style="font-weight:400"><input type="checkbox" class="ratio" value="1:1" ${(base.ratio || []).includes("1:1") ? "checked" : ""} style="width:auto"> 1:1 方形</label>
-          </div>
-          <div class="field"><label>素材</label>
-            <label style="font-weight:400"><input type="checkbox" id="needsAssets" ${base.needsAssets ? "checked" : ""} style="width:auto"> 需要圖像素材（不是純程式繪製）</label>
-          </div>
-        </div>
+        <div class="field"><label>新增日期</label><input id="added" type="date" value="${esc(base.added)}"></div>
         ${FIELDS.map(([k, label, type, ph]) => `<div class="field"><label for="${k}">${label}${ph ? `<small>${esc(ph)}</small>` : ""}</label>${
           type === "textarea" ? `<textarea id="${k}">${esc(f[k])}</textarea>` : `<input id="${k}" value="${esc(f[k])}" ${k === "id" && editing ? "readonly" : ""}>`
         }</div>`).join("")}
@@ -276,10 +246,7 @@ function viewForm(id) {
   const update = () => {
     const vals = {}; FIELDS.forEach(([k]) => vals[k] = document.getElementById(k).value);
     const obj = fromForm(vals, {
-      status: document.getElementById("status").value,
-      added: document.getElementById("added").value,
-      ratio: [...document.querySelectorAll(".ratio:checked")].map(x => x.value),
-      needsAssets: document.getElementById("needsAssets").checked
+      added: document.getElementById("added").value
     });
     const json = JSON.stringify(obj, null, 2) + "\n";
     document.getElementById("json").textContent = json;

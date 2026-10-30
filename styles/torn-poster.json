@@ -2,18 +2,13 @@
   "id": "torn-poster",
   "name": "撕貼海報風",
   "subtitle": "街頭拼貼",
-  "status": "已完成成片",
   "added": "2026-10-28",
-  "ratio": [
-    "16:9"
-  ],
-  "needsAssets": true,
   "bestFor": [
     "衝擊感強的開場",
     "社會議題",
     "情緒性標題"
   ],
-  "reference": "MAX 提供的三張撕貼海報牆圖（層疊海報、撕邊、粗黑字貼在白紙上）",
+  "reference": "MAX 提供的三張撕貼海報牆圖（層疊海報、撕邊、粗黑字貼在白紙上）；畫面全部用程式生成，不需要圖像素材",
   "mood": "粗糙、急迫、像街頭被一再覆蓋的海報牆。每個資訊都是「被貼上去」的。",
   "colors": [
     {
@@ -32,14 +27,19 @@
       "role": "關鍵句長條、劃線、問號"
     },
     {
-      "name": "藏青（素材）",
+      "name": "藏青",
       "hex": "#2c3e5c",
-      "role": "由牆面素材提供"
+      "role": "深色牆底色、藍海報"
     },
     {
-      "name": "芥末黃（素材）",
+      "name": "芥末黃",
       "hex": "#c9a227",
-      "role": "由海報素材提供"
+      "role": "彩色牆、黃海報"
+    },
+    {
+      "name": "膠帶",
+      "hex": "#e8e0c8",
+      "role": "膠帶（透明度 .82）"
     }
   ],
   "fonts": [
@@ -53,7 +53,7 @@
     },
     {
       "role": "所有文字",
-      "family": "加 grunge 遮罩：mask-image url(07_grunge.png)、mask-mode luminance、mask-size 700px auto"
+      "family": "加 SVG 磨損濾鏡：feTurbulence（baseFrequency .55）當 alpha 遮罩，像磨損的印刷"
     }
   ],
   "layout": [
@@ -61,16 +61,17 @@
     "標題紙兩角用膠帶壓住，膠帶要確實蓋在紙角上",
     "關鍵句放紅色長條紙，斜壓在主紙下緣",
     "來源註記寫在畫面左下的一條膠帶上",
-    "牆面壓暗（brightness .6–.72），前景紙張才跳得出來"
+    "牆面壓暗（深色牆 brightness .62、彩色牆 .72），前景紙張才跳得出來"
   ],
   "components": [
-    "橫幅撕邊白紙（大標題、大數字）",
-    "方形捲角白紙（月份格、問句）",
-    "紅、藍、黃空白海報（白色線稿圖示加白字）",
-    "膠帶與碎紙",
+    "牆面：程式隨機疊 60～80 張撕邊色塊（固定 seed），深色牆用藏青系、彩色牆用黃紅藍米白，部分色塊加網點或橫條",
+    "撕邊：clip-path polygon，邊緣每 12～22px 一個點、隨機抖動 10～26px",
+    "橫幅撕邊白紙（大標題、大數字）、方形白紙（月份格、問句）",
+    "紅、藍、黃海報（白色線稿圖示加白字，黃海報改用黑色）",
+    "半透明米色膠帶、碎紙",
     "舊數據寫在小碎紙上，用紅線劃掉"
   ],
-  "texture": "07_grunge 黑白髒污整片疊在最上層（multiply、透明度 .16），外加一層徑向暗角",
+  "texture": "紙張與色塊疊 SVG feTurbulence（baseFrequency .9）灰階雜訊、multiply；整面疊一層低頻髒污（feTurbulence .012、5 octaves 轉成褐色斑，multiply、透明度 .32），外加徑向暗角",
   "camera": "每層 .cam 慢推 scale 1→1.045",
   "transition": "整面牆被撕掉：每個場景一層 .layer（高 1220px，底邊 clip-path 鋸齒撕邊），段落結束時 y:-1350、rotation:-4，0.42 秒 power2.in 撕走，露出下一層",
   "motion": [
@@ -82,15 +83,6 @@
     "彩色海報依配音依序甩上牆"
   ],
   "ending": "方形白紙上，小字問句加大字結論，問號用紅色，最後一次大震",
-  "assets": [
-    "01_wall 彩色撕貼牆、02_wall_dark 深色藏青牆（16:9）",
-    "03_paper_wide 橫幅撕邊白紙",
-    "04_paper_square 方形捲角白紙",
-    "05_poster_01~03 紅、藍、黃空白海報",
-    "06_scrap_01~13 碎紙和膠帶",
-    "07_grunge 黑白髒污（16:9）",
-    "素材 prompt：A weathered urban wall completely covered in layers of old torn posters and newspaper scraps, collage texture, muted vintage palette of off-white, faded navy blue, brick red and mustard yellow, peeling paper edges, glue stains, grime, halftone print texture, flat front-facing view, NO readable text, NO logos, NO faces, 16:9（物件類加 isolated on a transparent background, PNG）"
-  ],
   "examples": [
     {
       "title": "台灣少子化危機開場 v1",
@@ -105,7 +97,8 @@
     "previews/torn-poster/04.jpg"
   ],
   "notes": [
-    "素材用 ChatGPT 生成：不要文字、logo、人臉；物件類要透明背景 PNG",
-    "樣張是純程式模擬的定格（SVG 撕邊＋雜訊紋理，不用 ChatGPT 素材），質感比正式成片平；原始碼在 preview-src/torn-poster.html"
+    "全部程式生成，不需要 ChatGPT 素材；換牆面只要換 seed",
+    "隨機要用固定 seed 的偽亂數（例如 seed*16807 % 2147483647），不能用 Math.random()，算圖才會每次一樣",
+    "樣張原始碼在 preview-src/torn-poster.html"
   ]
 }
