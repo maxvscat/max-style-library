@@ -1,0 +1,101 @@
+{
+  "id": "kinetic-beat-type",
+  "name": "節拍動態字型風",
+  "subtitle": "Kinetic Type",
+  "added": "2026-11-01",
+  "bestFor": [
+    "開場",
+    "宣傳預告",
+    "品牌短片",
+    "活動倒數",
+    "音樂節奏剪輯"
+  ],
+  "reference": "Scenario Explorations〈Kinetic Film〉（https://www.scenario.com/explorations/kinetic-film/）：52 秒、14 場景、174 BPM phonk，全片由程式逐幀算出",
+  "mood": "大字就是畫面主角，一拍一兩個詞，跟著鼓點硬切。高對比、急、有力，像音樂錄影帶的歌詞字卡。",
+  "colors": [
+    {
+      "name": "信號橘（--accent）",
+      "hex": "#ff4d00",
+      "role": "主底色、3D 字正面、重點字"
+    },
+    {
+      "name": "墨黑",
+      "hex": "#0b0b0b",
+      "role": "主文字、反轉場景底色"
+    },
+    {
+      "name": "米白",
+      "hex": "#f4f1ea",
+      "role": "反轉場景另一半、數字"
+    },
+    {
+      "name": "光線白",
+      "hex": "#fff6d6",
+      "role": "發光斜線"
+    },
+    {
+      "name": "深橘",
+      "hex": "#b33600",
+      "role": "3D 擠出字側面"
+    }
+  ],
+  "fonts": [
+    {
+      "role": "英文大字",
+      "family": "Inter Display Black（900），字距 −.02～−.04em"
+    },
+    {
+      "role": "中文大字",
+      "family": "Noto Sans CJK TC Black（900）"
+    },
+    {
+      "role": "小標、拍號、頁碼",
+      "family": "IBM Plex Mono 600（字距 .22em）"
+    }
+  ],
+  "layout": [
+    "一拍一畫面，畫面上只放一兩個詞，字級 400～620px 佔滿畫面",
+    "四角 HUD：左上 BEAT 編號、右上 ♩ = BPM、右下頁碼，等寬小字",
+    "大字可以超出畫面邊緣，但重點字要讀得出來"
+  ],
+  "components": [
+    "拉伸字：scaleX 1.5～2.2 或 scaleY 1.35，模擬可變寬度字體",
+    "3D 擠出字：同一個字往右下疊 20～24 層（每層位移 2px，顏色由深橘到暗褐），最上層橘色，外層加 perspective rotateY／rotateX",
+    "發光斜線：細長條加多層 box-shadow 光暈，斜切過畫面",
+    "色彩翻轉切割：clip-path 斜切黑白兩半，文字用 mix-blend-mode: difference 自動反色",
+    "數字捲軸：每位數一欄，上下兩格模糊、中間清楚",
+    "傾斜播放視窗：黑色視窗帶三個圓點，旋轉 −4°",
+    "背景淡淡的程式碼文字當紋理"
+  ],
+  "texture": "整面疊一層 feTurbulence 灰階顆粒（baseFrequency .85，multiply，透明度 .14）；動態模糊用 1～2 個模糊分身（blur 6px、透明度 .18）放在移動方向後方",
+  "camera": "鏡頭穿越文字：.cam 的 translateZ 從 −1800 衝到 +600（power4.in），穿過字時切下一拍；甩鏡用 x 位移加水平模糊",
+  "transition": "每一拍硬切（beat cut），切點用音樂節拍時間表 CUE.beat；換段落用整面黑白／橘黑色彩翻轉（invert）或甩鏡",
+  "motion": [
+    "字從窄拉到寬：scaleX 0.3→目標值，0.17 秒 expo.out，落在拍點上",
+    "字砸入：scale 1.6→1，0.12 秒，落地後下一拍才換",
+    "3D 字繞 Y 軸轉 15～25°，或鏡頭從字裡穿出",
+    "發光線從左下劃到右上（0.2 秒），劃過時文字反色",
+    "數字捲軸滾動停在目標值，快轉時加垂直模糊",
+    "重拍（drop）時整面色彩翻轉一次"
+  ],
+  "ending": "最後一拍停在品牌或標題大字上，留 1～1.5 秒，音樂收尾",
+  "examples": [
+    {
+      "title": "節拍動態字型風定格樣張",
+      "date": "2026-11-01",
+      "desc": "四拍：拉伸「節奏」→ 3D 擠出「剪輯」加發光斜線 → 黑白切割「CUT／每一拍都切」→ 傾斜視窗數字捲軸「15 秒剪完」"
+    }
+  ],
+  "previews": [
+    "previews/kinetic-beat-type/01.jpg",
+    "previews/kinetic-beat-type/02.jpg",
+    "previews/kinetic-beat-type/03.jpg",
+    "previews/kinetic-beat-type/04.jpg"
+  ],
+  "notes": [
+    "剪輯點跟音樂節拍走，不是跟配音的字：先拿到（或生成）指定 BPM 的音樂，量出每一拍的秒數做成 CUE.beat",
+    "畫面全部程式繪製，不需要圖像素材",
+    "強調色可依品牌換掉 --accent，其餘維持黑、米白",
+    "樣張原始碼在 preview-src/kinetic-beat-type.html"
+  ]
+}

@@ -1,0 +1,73 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--accent:#ff4d00;--ink:#0b0b0b;--paper:#f4f1ea;--glow:#fff6d6}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden}
+body{font-family:"Inter Display","Noto Sans CJK TC",sans-serif;font-weight:900;background:var(--accent);color:var(--ink)}
+.cjk{font-family:"Noto Sans CJK TC";font-weight:900}
+.mono{font-family:"IBM Plex Mono","DejaVu Sans Mono",monospace;font-weight:600;letter-spacing:.22em;font-size:22px}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}.scene.on{display:block}
+.grain{position:absolute;inset:0;filter:url(#grain);opacity:.14;mix-blend-mode:multiply;pointer-events:none;z-index:20}
+.hud{position:absolute;z-index:15}
+.hud.tl{left:64px;top:52px}.hud.tr{right:64px;top:52px}.hud.bl{left:64px;bottom:48px}.hud.br{right:64px;bottom:48px}
+.ab{position:absolute;white-space:nowrap;line-height:.82}
+/* motion-blur ghosts */
+.ghost{position:absolute;white-space:nowrap;line-height:.82;opacity:.18;filter:blur(6px)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4"/><feColorMatrix type="saturate" values="0"/></filter></svg>
+
+<!-- S1：拉伸大字（橘底黑字） -->
+<div class="scene" id="s1" style="background:var(--accent)">
+ <div class="hud tl mono">BEAT 01</div><div class="hud tr mono">♩ = 174</div>
+ <div class="ghost cjk" style="left:-10px;top:170px;font-size:600px;transform:scaleX(1.5);transform-origin:left">節奏</div>
+ <div class="ab cjk" style="left:60px;top:170px;font-size:600px;transform:scaleX(1.5);transform-origin:left">節奏</div>
+ <div class="ab" style="left:72px;bottom:110px;font-size:110px;letter-spacing:-.02em;transform:scaleY(1.35);transform-origin:bottom left">ELASTIC</div>
+ <div class="hud br mono">01 / 04</div>
+</div>
+
+<!-- S2：黑底 3D 擠出字＋發光斜線 -->
+<div class="scene" id="s2" style="background:var(--ink)">
+ <div class="hud tl mono" style="color:var(--accent)">BEAT 02</div><div class="hud tr mono" style="color:#777">♩ = 174</div>
+ <div id="extrude" class="ab cjk" style="left:50%;top:50%;font-size:400px;transform:translate(-50%,-52%) perspective(1400px) rotateY(-22deg) rotateX(12deg)"></div>
+ <div style="position:absolute;left:-200px;top:540px;width:2400px;height:10px;background:var(--glow);transform:rotate(-14deg);box-shadow:0 0 30px 8px rgba(255,200,120,.9),0 0 90px 30px rgba(255,77,0,.55);z-index:5"></div>
+ <div class="hud bl mono" style="color:#777">EXTRUDE · DEPTH 24</div><div class="hud br mono" style="color:#777">02 / 04</div>
+</div>
+
+<!-- S3：色彩翻轉切割 -->
+<div class="scene" id="s3" style="background:var(--paper)">
+ <div style="position:absolute;inset:0;background:var(--ink);clip-path:polygon(0 0,58% 0,42% 100%,0 100%)"></div>
+ <div class="ab" style="left:50%;top:50%;transform:translate(-50%,-50%);font-size:430px;letter-spacing:-.04em;color:var(--paper);mix-blend-mode:difference">CUT</div>
+ <div class="ab cjk" style="left:50%;top:76%;transform:translate(-50%,0);font-size:96px;color:var(--accent);letter-spacing:.3em">每一拍都切</div>
+ <div class="hud tl mono" style="color:var(--paper)">BEAT 03</div><div class="hud tr mono">INVERT</div>
+ <div class="hud br mono">03 / 04</div>
+</div>
+
+<!-- S4：數字捲軸＋傾斜視窗 -->
+<div class="scene" id="s4" style="background:var(--accent)">
+ <div id="code" class="mono" style="position:absolute;inset:0;padding:60px 64px;font-size:20px;line-height:1.7;letter-spacing:.04em;color:rgba(11,11,11,.16);white-space:pre"></div>
+ <div style="position:absolute;left:150px;top:250px;width:1000px;height:580px;background:var(--ink);transform:rotate(-4deg);box-shadow:0 30px 60px rgba(0,0,0,.35);border-radius:6px;overflow:hidden">
+  <div style="height:40px;background:#1c1c1c;display:flex;gap:10px;align-items:center;padding:0 16px"><i style="width:12px;height:12px;border-radius:50%;background:#444"></i><i style="width:12px;height:12px;border-radius:50%;background:#444"></i><i style="width:12px;height:12px;border-radius:50%;background:var(--accent)"></i></div>
+  <div id="reel" style="display:flex;justify-content:center;align-items:center;height:540px;gap:6px"></div>
+ </div>
+ <div class="ab cjk" style="left:1220px;top:330px;font-size:150px;line-height:1.05">秒<br>剪完</div>
+ <div class="ab mono" style="left:1226px;top:680px;font-size:24px">RENDERED · 4K · 30FPS</div>
+ <div class="hud tl mono">BEAT 04</div><div class="hud br mono">04 / 04</div>
+</div>
+
+<div class="grain"></div>
+<script>
+// 3D extrude
+const ex=document.getElementById('extrude');let h='';
+for(let i=24;i>=1;i--){h+=`<span style="position:absolute;left:0;top:0;transform:translate(${i*2.2}px,${i*2.2}px);color:${i>20?'#5a1c00':'#b33600'}">剪輯</span>`}
+ex.innerHTML=h+'<span style="position:relative;color:#ff4d00">剪輯</span>';
+// code bg
+const lines=['tl.to(".word",{scaleX:2.15,duration:.17,ease:"expo.out"},CUE.beat[0])','tl.set(".frame",{filter:"invert(1)"},CUE.beat[2])','for(let f=0;f<FRAMES;f++) await page.screenshot({path:`f_${f}.png`})','const BPM=174, BEAT=60/BPM  // 0.345s','tl.fromTo(".cam",{z:-1800},{z:600,ease:"power4.in"},CUE.drop)','ffmpeg -framerate 30 -i f_%05d.png -i music.wav out.mp4'];
+let c='';for(let i=0;i<34;i++)c+=lines[i%lines.length]+'\n';document.getElementById('code').textContent=c;
+// slot reel
+const R=document.getElementById('reel');
+'15'.split('').forEach((d,k)=>{const col=document.createElement('div');col.style.cssText='position:relative;width:250px;height:420px;overflow:hidden';
+ const n=+d;let s='';for(let j=-1;j<=1;j++){const v=(n+j+10)%10;s+=`<div style="position:absolute;left:0;right:0;top:${60+j*360}px;text-align:center;font-family:Inter Display;font-weight:900;font-size:380px;line-height:300px;color:${j?'rgba(244,241,234,.25)':'#f4f1ea'};${j?'filter:blur(5px)':''}">${v}</div>`}
+ col.innerHTML=s;R.appendChild(col)});
+const S=new URLSearchParams(location.search).get('s')||'1';document.getElementById('s'+S).classList.add('on');
+</script></body></html>
